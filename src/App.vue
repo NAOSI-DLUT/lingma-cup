@@ -33,6 +33,13 @@
             奖项设置
           </a>
           <a
+            href="#faq"
+            class="text-blue-600 hover:text-blue-700 transition-colors flex items-center"
+          >
+            <div class="i-ri-question-line mr-1"></div>
+            常见问题
+          </a>
+          <a
             href="#register"
             class="text-blue-600 hover:text-blue-700 transition-colors flex items-center"
           >
@@ -97,9 +104,9 @@
             <h3>面向人群</h3>
             <ul>
               <li>
-                核心参赛对象：大连理工大学全日制在校本科生（含大一至大四年级）
+                核心参赛对象：大连理工大学全日制在校学生（含大一至大四年级、全体研究生）
               </li>
-              <li>跨专业组队要求：每队需含至少1名非计算机专业学生</li>
+              <li>含至少1名非计算机专业学生的队伍被认定为跨专业队伍（促进学科交叉创新，非强制要求）</li>
               <li>
                 校外邀请机制：开放兄弟院校学生组队友情参与（颁发《友情参与证书》，不参与评奖）
               </li>
@@ -121,9 +128,26 @@
             <h3>比赛形式</h3>
             <ul>
               <li>赛事组委会将公布5个指定主题</li>
-              <li>参赛队伍需基于AI IDE开发工具（通义灵码）进行项目开发</li>
+              <li>参赛队伍需基于且只能基于AI IDE开发工具（通义灵码）进行项目开发，允许部分手写代码</li>
               <li>项目形态可包括但不限于网站、移动应用（App）、桌面应用程序等</li>
             </ul>
+          </section>
+
+          <section>
+            <h3>提交要求</h3>
+            <p>开发周期结束后，各队需提交项目托管于<strong>GitHub或Gitee平台</strong>的代码仓库链接。</p>
+            <p><strong>仓库内容必须包含：</strong></p>
+            <ol>
+              <li>
+                <strong>项目说明文档（README.md）</strong>：清晰阐述项目创意、实现功能、运行/部署指南。若项目包含可执行成果（如部署的网站链接、可执行文件、安装包等），须在文档中明确说明访问方式或获取途径，可执行文件应发布至仓库的Release区域。
+              </li>
+              <li>
+                <strong>完整源代码</strong>：提供可实际运行的项目源代码。项目能否成功运行将对最终评分产生显著影响。
+              </li>
+              <li>
+                <strong>项目开发流程说明（chat.md）</strong>：清晰描述vibe coding流程，需提供用户输入的完整Prompt序列（包括用于引导AI IDE进行Bug修复的提示词）。
+              </li>
+            </ol>
           </section>
         </div>
       </section>
@@ -194,6 +218,45 @@
         </div>
       </section>
 
+      <!-- FAQ Section -->
+      <section
+        id="faq"
+        class="p-6 rounded-lg shadow-md bg-white dark:bg-gray-800"
+      >
+        <h2 class="text-2xl font-bold mb-4 text-blue-600 flex items-center">
+          <div class="i-ri-question-line mr-2"></div>
+          常见问题
+        </h2>
+
+        <div class="space-y-4">
+          <div
+            v-for="(faq, index) in faqList"
+            :key="index"
+            class="border border-gray-200 dark:border-gray-600 rounded-lg"
+          >
+            <button
+              @click="faq.isOpen = !faq.isOpen"
+              class="w-full p-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg"
+            >
+              <span class="font-medium">{{ faq.question }}</span>
+              <div
+                :class="[
+                  'transition-transform duration-200',
+                  faq.isOpen ? 'rotate-180' : 'rotate-0'
+                ]"
+                class="i-ri-arrow-down-s-line text-xl"
+              ></div>
+            </button>
+            <div
+              v-show="faq.isOpen"
+              class="px-4 pb-4 text-gray-700 dark:text-gray-300 faq-content"
+            >
+              <p v-html="faq.answer"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Register Section -->
       <section
         id="register"
@@ -218,10 +281,16 @@
             <div class="i-ri-lightbulb-line mr-2"></div>
             温馨提示
           </h3>
-          <p>建议尽早报名以便获得更多赛事资源和支持！</p>
+          <p class="mb-3">建议尽早报名以便获得更多赛事资源和支持！</p>
+          <div class="flex items-center space-x-2 text-sm">
+            <div class="i-ri-qq-line text-blue-600 dark:text-blue-400"></div>
+            <span class="font-medium">赛事交流群：</span>
+            <span class="font-mono bg-white dark:bg-gray-700 px-2 py-1 rounded border">1040994124</span>
+          </div>
         </div>
 
         <button
+          @click="handleRegistration"
           class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
         >
           <div class="i-ri-arrow-right-circle-line mr-2"></div>
@@ -254,6 +323,63 @@
         </div>
       </div>
     </footer>
+
+    <!-- 自定义弹窗 -->
+    <div
+      v-if="showModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal-overlay"
+      @click="closeModal"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md mx-4 w-full modal-content"
+        @click.stop
+      >
+        <div class="p-6">
+          <!-- 标题 -->
+          <div class="flex items-center mb-4">
+            <div
+              :class="modalData.type === 'warning' ? 'i-ri-time-line' : 'i-ri-check-circle-line'"
+              class="text-2xl mr-3"
+              :style="{ color: modalData.type === 'warning' ? '#f59e0b' : '#10b981' }"
+            ></div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+              {{ modalData.title }}
+            </h3>
+          </div>
+
+          <!-- 内容 -->
+          <div class="mb-6 text-gray-700 dark:text-gray-300">
+            <p class="mb-2">{{ modalData.message }}</p>
+            <div
+              v-if="modalData.countdownText"
+              class="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg"
+            >
+              <p class="text-sm font-medium text-blue-800 dark:text-blue-200">
+                {{ modalData.countdownText }}
+              </p>
+            </div>
+            <div
+              v-if="modalData.tip"
+              class="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+            >
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                💡 {{ modalData.tip }}
+              </p>
+            </div>
+          </div>
+
+                     <!-- 按钮 -->
+           <div class="flex justify-end">
+             <button
+               @click="closeModal"
+               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+             >
+               我知道了
+             </button>
+           </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -329,4 +455,163 @@ const awardsList = ref([
     description: "键盘迈从G87/队（价值:288/份）",
   },
 ]);
+
+const faqList = ref([
+  {
+    question: "哪些学生有参赛和评奖资格？",
+    answer: "大连理工大学主校区、开发区校区、盘锦校区的<strong>本科生、研究生</strong>均有评奖资格。欢迎各校区的同学踊跃参与！",
+    isOpen: false,
+  },
+  {
+    question: "什么是跨专业组队？有什么具体要求？",
+    answer: "跨专业组队的具体要求为：队内至少需要有<strong>两个不同学院</strong>的同学。需要注意的是，软件学院和国际信息与软件学院属于同一个学院。跨专业队伍可以获得额外的创新性加分！",
+    isOpen: false,
+  },
+  {
+    question: "队伍人数有什么限制？单人参赛有什么政策？",
+    answer: "队伍人数上限为<strong>3人</strong>，可以1-3人自由组队。<strong>单人队伍将得到部分优惠政策</strong>。如果你暂时没有队友，欢迎在群内捞人组队！",
+    isOpen: false,
+  },
+  {
+    question: "技术讲座的回放地址在哪？后续还会有vibe coding相关的知识分享吗？",
+    answer: "回放在：<a href='https://meeting.tencent.com/crm/N14kjJn3f0' target='_blank' rel='noopener noreferrer'>https://meeting.tencent.com/crm/N14kjJn3f0</a> ，后续<strong>还会有相关的分享</strong>，例如博客等等形式",
+    isOpen: false,
+  },
+  {
+    question: "路演在哪里举行？其他校区的学生怎么参加？",
+    answer: "路演地点位于<strong>开发区校区</strong>。开发区校区的同学必须参加线下路演，其他校区（主校区、盘锦校区）的同学可以<strong>申请线上参加路演</strong>。",
+    isOpen: false,
+  },
+  {
+    question: "外校学生可以参加路演吗？",
+    answer: "可以！外校队伍初赛排名的<strong>前20%</strong>可以申请参与线上路演。虽然外校队伍不参与正式评奖，但这是一个很好的交流学习机会。",
+    isOpen: false,
+  },
+  {
+    question: "在哪里可以找到详细的赛程安排和规则？",
+    answer: "具体赛程安排请查看<strong>群文件细则</strong>，里面有完整的时间安排和详细规定。有任何问题都可以随时在群中交流或者私信赛事组成员！",
+    isOpen: false,
+  },
+  {
+    question: "如何加入赛事交流群？群号是多少？",
+    answer: "QQ赛事交流群号：<strong>1040994124</strong>。群内可以寻找队友、获取最新资讯、技术交流答疑。有任何问题都可以在群中咨询赛事组成员！",
+    isOpen: false,
+  },
+  {
+    question: "如何寻找队友？有什么建议？",
+    answer: "想跨专业组队的同学多在群里捞人！我们的活动交流群是寻找队友的最佳平台。也欢迎大家转发推广本赛事，让更多优秀的同学加入进来！",
+    isOpen: false,
+  },
+]);
+
+// 模态框状态
+const showModal = ref(false);
+const modalData = ref({
+  type: 'warning', // 'warning' | 'success'
+  title: '',
+  message: '',
+  countdownText: '',
+  tip: ''
+});
+
+// 处理报名按钮点击
+const handleRegistration = () => {
+  const now = new Date();
+  const registrationStartTime = new Date('2025-08-11T00:00:00');
+  
+  if (now < registrationStartTime) {
+    // 计算剩余时间
+    const timeDiff = registrationStartTime - now;
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    let timeRemaining = '';
+    if (days > 0) {
+      timeRemaining = `距离开始还有：${days}天${hours}小时${minutes}分钟`;
+    } else if (hours > 0) {
+      timeRemaining = `距离开始还有：${hours}小时${minutes}分钟`;
+    } else {
+      timeRemaining = `距离开始还有：${minutes}分钟`;
+    }
+    
+    modalData.value = {
+      type: 'warning',
+      title: '报名暂未开始',
+      message: '报名将于2025年8月11日0点正式开启',
+      countdownText: timeRemaining,
+      tip: '可先加入QQ群了解更多信息：1040994124'
+    };
+    showModal.value = true;
+  } else {
+    modalData.value = {
+      type: 'success',
+      title: '报名已开始',
+      message: '请通过官方渠道进行报名',
+      countdownText: '',
+      tip: '详细信息请查看群文件或咨询群管理员'
+    };
+    showModal.value = true;
+  }
+};
+
+// 关闭模态框
+const closeModal = () => {
+  showModal.value = false;
+};
 </script>
+
+<style scoped>
+.faq-content :deep(a) {
+  color: #2563eb;
+  text-decoration: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  word-break: break-all;
+}
+
+.faq-content :deep(a:hover) {
+  background-color: rgba(37, 99, 235, 0.1);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+/* 深色模式 */
+:global(.dark) .faq-content :deep(a) {
+  color: #60a5fa;
+}
+
+:global(.dark) .faq-content :deep(a:hover) {
+  background-color: rgba(96, 165, 250, 0.1);
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
+}
+
+/* 模态框动画 */
+.modal-overlay {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
