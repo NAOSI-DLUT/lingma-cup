@@ -33,6 +33,13 @@
             奖项设置
           </a>
           <a
+            href="#faq"
+            class="text-blue-600 hover:text-blue-700 transition-colors flex items-center"
+          >
+            <div class="i-ri-question-line mr-1"></div>
+            常见问题
+          </a>
+          <a
             href="#register"
             class="text-blue-600 hover:text-blue-700 transition-colors flex items-center"
           >
@@ -194,6 +201,45 @@
         </div>
       </section>
 
+      <!-- FAQ Section -->
+      <section
+        id="faq"
+        class="p-6 rounded-lg shadow-md bg-white dark:bg-gray-800"
+      >
+        <h2 class="text-2xl font-bold mb-4 text-blue-600 flex items-center">
+          <div class="i-ri-question-line mr-2"></div>
+          常见问题
+        </h2>
+
+        <div class="space-y-4">
+          <div
+            v-for="(faq, index) in faqList"
+            :key="index"
+            class="border border-gray-200 dark:border-gray-600 rounded-lg"
+          >
+            <button
+              @click="faq.isOpen = !faq.isOpen"
+              class="w-full p-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg"
+            >
+              <span class="font-medium">{{ faq.question }}</span>
+              <div
+                :class="[
+                  'transition-transform duration-200',
+                  faq.isOpen ? 'rotate-180' : 'rotate-0'
+                ]"
+                class="i-ri-arrow-down-s-line text-xl"
+              ></div>
+            </button>
+            <div
+              v-show="faq.isOpen"
+              class="px-4 pb-4 text-gray-700 dark:text-gray-300 faq-content"
+            >
+              <p v-html="faq.answer"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Register Section -->
       <section
         id="register"
@@ -329,4 +375,73 @@ const awardsList = ref([
     description: "键盘迈从G87/队（价值:288/份）",
   },
 ]);
+
+const faqList = ref([
+  {
+    question: "哪些学生有参赛和评奖资格？",
+    answer: "大连理工大学主校区、开发区校区、盘锦校区的<strong>本科生、研究生</strong>均有评奖资格。欢迎各校区的同学踊跃参与！",
+    isOpen: false,
+  },
+  {
+    question: "什么是跨专业组队？有什么具体要求？",
+    answer: "跨专业组队的具体要求为：队内至少需要有<strong>两个不同学院</strong>的同学。需要注意的是，软件学院和国际信息与软件学院属于同一个学院。跨专业队伍可以获得额外的创新性加分！",
+    isOpen: false,
+  },
+  {
+    question: "队伍人数有什么限制？单人参赛有什么政策？",
+    answer: "队伍人数上限为<strong>3人</strong>，可以1-3人自由组队。<strong>单人队伍将得到部分优惠政策</strong>。如果你暂时没有队友，欢迎在群内捞人组队！",
+    isOpen: false,
+  },
+  {
+    question: "技术讲座的回放地址在哪？后续还会有vibe coding相关的知识分享吗？",
+    answer: "回放在：<a href='https://meeting.tencent.com/crm/N14kjJn3f0' target='_blank' rel='noopener noreferrer'>https://meeting.tencent.com/crm/N14kjJn3f0</a> ，后续<strong>还会有相关的分享</strong>，例如博客等等形式",
+    isOpen: false,
+  },
+  {
+    question: "路演在哪里举行？其他校区的学生怎么参加？",
+    answer: "路演地点位于<strong>开发区校区</strong>。开发区校区的同学必须参加线下路演，其他校区（主校区、盘锦校区）的同学可以<strong>申请线上参加路演</strong>。",
+    isOpen: false,
+  },
+  {
+    question: "外校学生可以参加路演吗？",
+    answer: "可以！外校队伍初赛排名的<strong>前20%</strong>可以申请参与线上路演。虽然外校队伍不参与正式评奖，但这是一个很好的交流学习机会。",
+    isOpen: false,
+  },
+  {
+    question: "在哪里可以找到详细的赛程安排和规则？",
+    answer: "具体赛程安排请查看<strong>群文件细则</strong>，里面有完整的时间安排和详细规定。有任何问题都可以随时在群中交流或者私信赛事组成员！",
+    isOpen: false,
+  },
+  {
+    question: "如何寻找队友？有什么建议？",
+    answer: "想跨专业组队的同学多在群里捞人！我们的活动交流群是寻找队友的最佳平台。也欢迎大家转发推广本赛事，让更多优秀的同学加入进来！",
+    isOpen: false,
+  },
+]);
 </script>
+
+<style scoped>
+.faq-content :deep(a) {
+  color: #2563eb;
+  text-decoration: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  word-break: break-all;
+}
+
+.faq-content :deep(a:hover) {
+  background-color: rgba(37, 99, 235, 0.1);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+/* 深色模式 */
+:global(.dark) .faq-content :deep(a) {
+  color: #60a5fa;
+}
+
+:global(.dark) .faq-content :deep(a:hover) {
+  background-color: rgba(96, 165, 250, 0.1);
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
+}
+</style>
