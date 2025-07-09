@@ -132,6 +132,23 @@
               <li>项目形态可包括但不限于网站、移动应用（App）、桌面应用程序等</li>
             </ul>
           </section>
+
+          <section>
+            <h3>提交要求</h3>
+            <p>开发周期结束后，各队需提交项目托管于<strong>GitHub或Gitee平台</strong>的代码仓库链接。</p>
+            <p><strong>仓库内容必须包含：</strong></p>
+            <ol>
+              <li>
+                <strong>项目说明文档（README.md）</strong>：清晰阐述项目创意、实现功能、运行/部署指南。若项目包含可执行成果（如部署的网站链接、可执行文件、安装包等），须在文档中明确说明访问方式或获取途径，可执行文件应发布至仓库的Release区域。
+              </li>
+              <li>
+                <strong>完整源代码</strong>：提供可实际运行的项目源代码。项目能否成功运行将对最终评分产生显著影响。
+              </li>
+              <li>
+                <strong>项目开发流程说明（chat.md）</strong>：清晰描述vibe coding流程，需提供用户输入的完整Prompt序列（包括用于引导AI IDE进行Bug修复的提示词）。
+              </li>
+            </ol>
+          </section>
         </div>
       </section>
 
