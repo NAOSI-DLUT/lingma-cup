@@ -290,6 +290,7 @@
         </div>
 
         <button
+          @click="handleRegistration"
           class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
         >
           <div class="i-ri-arrow-right-circle-line mr-2"></div>
@@ -322,6 +323,63 @@
         </div>
       </div>
     </footer>
+
+    <!-- 自定义弹窗 -->
+    <div
+      v-if="showModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal-overlay"
+      @click="closeModal"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md mx-4 w-full modal-content"
+        @click.stop
+      >
+        <div class="p-6">
+          <!-- 标题 -->
+          <div class="flex items-center mb-4">
+            <div
+              :class="modalData.type === 'warning' ? 'i-ri-time-line' : 'i-ri-check-circle-line'"
+              class="text-2xl mr-3"
+              :style="{ color: modalData.type === 'warning' ? '#f59e0b' : '#10b981' }"
+            ></div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+              {{ modalData.title }}
+            </h3>
+          </div>
+
+          <!-- 内容 -->
+          <div class="mb-6 text-gray-700 dark:text-gray-300">
+            <p class="mb-2">{{ modalData.message }}</p>
+            <div
+              v-if="modalData.countdownText"
+              class="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg"
+            >
+              <p class="text-sm font-medium text-blue-800 dark:text-blue-200">
+                {{ modalData.countdownText }}
+              </p>
+            </div>
+            <div
+              v-if="modalData.tip"
+              class="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+            >
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                💡 {{ modalData.tip }}
+              </p>
+            </div>
+          </div>
+
+                     <!-- 按钮 -->
+           <div class="flex justify-end">
+             <button
+               @click="closeModal"
+               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+             >
+               我知道了
+             </button>
+           </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -445,6 +503,62 @@ const faqList = ref([
     isOpen: false,
   },
 ]);
+
+// 模态框状态
+const showModal = ref(false);
+const modalData = ref({
+  type: 'warning', // 'warning' | 'success'
+  title: '',
+  message: '',
+  countdownText: '',
+  tip: ''
+});
+
+// 处理报名按钮点击
+const handleRegistration = () => {
+  const now = new Date();
+  const registrationStartTime = new Date('2025-08-11T00:00:00');
+  
+  if (now < registrationStartTime) {
+    // 计算剩余时间
+    const timeDiff = registrationStartTime - now;
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    let timeRemaining = '';
+    if (days > 0) {
+      timeRemaining = `距离开始还有：${days}天${hours}小时${minutes}分钟`;
+    } else if (hours > 0) {
+      timeRemaining = `距离开始还有：${hours}小时${minutes}分钟`;
+    } else {
+      timeRemaining = `距离开始还有：${minutes}分钟`;
+    }
+    
+    modalData.value = {
+      type: 'warning',
+      title: '报名暂未开始',
+      message: '报名将于2025年8月11日0点正式开启',
+      countdownText: timeRemaining,
+      tip: '可先加入QQ群了解更多信息：1040994124'
+    };
+    showModal.value = true;
+  } else {
+    modalData.value = {
+      type: 'success',
+      title: '报名已开始',
+      message: '请通过官方渠道进行报名',
+      countdownText: '',
+      tip: '详细信息请查看群文件或咨询群管理员'
+    };
+    showModal.value = true;
+  }
+};
+
+// 关闭模态框
+const closeModal = () => {
+  showModal.value = false;
+};
 </script>
 
 <style scoped>
@@ -470,5 +584,34 @@ const faqList = ref([
 :global(.dark) .faq-content :deep(a:hover) {
   background-color: rgba(96, 165, 250, 0.1);
   box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
+}
+
+/* 模态框动画 */
+.modal-overlay {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
