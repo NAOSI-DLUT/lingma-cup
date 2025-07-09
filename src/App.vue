@@ -264,7 +264,12 @@
             <div class="i-ri-lightbulb-line mr-2"></div>
             温馨提示
           </h3>
-          <p>建议尽早报名以便获得更多赛事资源和支持！</p>
+          <p class="mb-3">建议尽早报名以便获得更多赛事资源和支持！</p>
+          <div class="flex items-center space-x-2 text-sm">
+            <div class="i-ri-qq-line text-blue-600 dark:text-blue-400"></div>
+            <span class="font-medium">赛事交流群：</span>
+            <span class="font-mono bg-white dark:bg-gray-700 px-2 py-1 rounded border">1040994124</span>
+          </div>
         </div>
 
         <button
@@ -410,6 +415,11 @@ const faqList = ref([
   {
     question: "在哪里可以找到详细的赛程安排和规则？",
     answer: "具体赛程安排请查看<strong>群文件细则</strong>，里面有完整的时间安排和详细规定。有任何问题都可以随时在群中交流或者私信赛事组成员！",
+    isOpen: false,
+  },
+  {
+    question: "如何加入赛事交流群？群号是多少？",
+    answer: "QQ赛事交流群号：<strong>1040994124</strong>。群内可以寻找队友、获取最新资讯、技术交流答疑。有任何问题都可以在群中咨询赛事组成员！",
     isOpen: false,
   },
   {
