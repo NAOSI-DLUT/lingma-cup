@@ -517,7 +517,7 @@ const modalData = ref({
 // 处理报名按钮点击
 const handleRegistration = () => {
   const now = new Date();
-  const registrationStartTime = new Date('2025-08-11T00:00:00');
+  const registrationStartTime = new Date('2025-07-15T00:00:00');
   
   if (now < registrationStartTime) {
     // 计算剩余时间
@@ -538,7 +538,7 @@ const handleRegistration = () => {
     modalData.value = {
       type: 'warning',
       title: '报名暂未开始',
-      message: '报名将于2025年8月11日0点正式开启',
+      message: '报名将于2025年7月15日0点正式开启',
       countdownText: timeRemaining,
       tip: '可先加入QQ群了解更多信息：1040994124'
     };
