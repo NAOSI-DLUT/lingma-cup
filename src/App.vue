@@ -544,10 +544,11 @@ const handleRegistration = () => {
     };
     showModal.value = true;
   } else {
+    window.open("https://tianchi.aliyun.com/competition/entrance/532398")
     modalData.value = {
       type: 'success',
       title: '报名已开始',
-      message: '请通过官方渠道进行报名',
+      message: '本次活动后续流程在天池平台进行！已跳转！',
       countdownText: '',
       tip: '详细信息请查看群文件或咨询群管理员'
     };
